@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="资源文件\res">
+      <UniqueIdentifier>{7d90dccd-7c61-4e37-b9ec-73c31b5c0be9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\res\shaders">
+      <UniqueIdentifier>{b301eb42-a9bf-4544-8d5f-5dda3f693ea6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -23,5 +29,16 @@
     <None Include="glew32.dll">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="res\shaders\core.fs">
+      <Filter>资源文件\res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\core.vs">
+      <Filter>资源文件\res\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

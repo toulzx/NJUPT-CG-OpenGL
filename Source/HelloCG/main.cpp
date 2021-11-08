@@ -55,10 +55,10 @@ int main()
 
 	// 顶点位置集
 	GLfloat vertices[] =
-	{	// position
-		-0.5f, -0.5f,  0.0f,
-		 0.5f, -0.5f,  0.0f,
-		 0.0f,  0.5f,  0.0f
+	{	// position					// color
+		-0.5f, -0.5f,  0.0f,		 1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f,  0.0f,		 0.0f,  1.0f,  0.0f,
+		 0.0f,  0.5f,  0.0f,		 0.0f,  0.0f,  1.0f
 	};
 
 	// 创建顶点正面对象（VAO）、顶点缓存对象（VBO）
@@ -74,9 +74,12 @@ int main()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	// 设置 VAO
-	// 对应此句："layout(location = 0) in vec3 position;" 和上述 vertices[]
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	// 对应 core.vs 中此句："layout(location = 0) in vec3 position;" 和本文上述 vertices[] "position" 部分
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
+	// 对应 core.vs 中此句："layout(location = 1) in vec3 ourColor;" 和本文上述 vertices[] "color"部分
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 
 	// 解绑定 VAO、VBO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

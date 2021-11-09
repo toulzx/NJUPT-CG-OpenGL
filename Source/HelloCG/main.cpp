@@ -53,7 +53,7 @@ int main()
 	Shader ourShader = Shader("res/shaders/core.vs", "res/shaders/core.fs");
 
 
-	// 顶点位置集 rectangle
+	// 顶点位置集 Square
 	GLfloat vertices[] =
 	{	// position						// color
 		// first triangle
@@ -62,9 +62,9 @@ int main()
 		-0.5f,  0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
 
 		// second triangle
-		 0.5f, -0.5f,  0.0f,			 0.0f,  1.0f,  0.0f,
-		-0.5f, -0.5f,  0.0f,			 0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f,  0.0f,			 0.0f,  1.0f,  0.0f
+		 0.5f, -0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.0f,			 1.0f,  0.0f,  0.0f
 	};
 
 	// 创建顶点正面对象（VAO）、顶点缓存对象（VBO）
@@ -83,7 +83,7 @@ int main()
 	// 对应 core.vs 中此句："layout(location = 0) in vec3 position;" 和本文上述 vertices[] "position" 部分
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	// 对应 core.vs 中此句："layout(location = 1) in vec3 ourColor;" 和本文上述 vertices[] "color"部分
+	// 对应 core.vs 中此句："layout(location = 1) in vec3 ourColor;" 和本文上述 vertices[] "color" 部分
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3*sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 
@@ -102,6 +102,12 @@ int main()
 
 		// 使用着色器绘制一个三角形
 		ourShader.Use();
+
+			// 作业 1 颜色交替
+		float time = glfwGetTime();
+		float colorValue = (sin(time) / 2) + 0.5;
+		glUniform1f(glGetUniformLocation(ourShader.Program, "colorValue"), colorValue);
+
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);

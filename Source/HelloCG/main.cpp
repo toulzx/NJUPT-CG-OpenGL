@@ -4,9 +4,12 @@
 #include <GL/glew.h>
 //GLFW
 #include <GLFW/glfw3.h>
-//GLM
-#include <glm/glm.hpp>
+//SOIL2
+#include "SOIL2/SOIL2.h"
+#include "SOIL2/stb_image.h"
+
 #include "Shader.h"
+
 
 // ´°¿Ú´óÐ¡
 const GLint WIDTH = 800, HEIGHT = 600;

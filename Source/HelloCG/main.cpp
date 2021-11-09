@@ -4,7 +4,8 @@
 #include <GL/glew.h>
 //GLFW
 #include <GLFW/glfw3.h>
-
+//GLM
+#include <glm/glm.hpp>
 #include "Shader.h"
 
 // ´°¿Ú´óÐ¡

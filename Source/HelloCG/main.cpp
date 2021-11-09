@@ -53,12 +53,18 @@ int main()
 	Shader ourShader = Shader("res/shaders/core.vs", "res/shaders/core.fs");
 
 
-	// 顶点位置集
+	// 顶点位置集 rectangle
 	GLfloat vertices[] =
-	{	// position					// color
-		-0.5f, -0.5f,  0.0f,		 1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f,  0.0f,		 0.0f,  1.0f,  0.0f,
-		 0.0f,  0.5f,  0.0f,		 0.0f,  0.0f,  1.0f
+	{	// position						// color
+		// first triangle
+		 0.5f,  0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
+
+		// second triangle
+		 0.5f, -0.5f,  0.0f,			 0.0f,  1.0f,  0.0f,
+		-0.5f, -0.5f,  0.0f,			 0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.0f,			 0.0f,  1.0f,  0.0f
 	};
 
 	// 创建顶点正面对象（VAO）、顶点缓存对象（VBO）
@@ -97,7 +103,7 @@ int main()
 		// 使用着色器绘制一个三角形
 		ourShader.Use();
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(window);

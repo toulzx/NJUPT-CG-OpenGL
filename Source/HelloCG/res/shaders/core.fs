@@ -11,10 +11,8 @@ uniform float colorValue;
 
 void main()
 {
-
-	color = vec4(vertexColor.x,
-					vertexColor.y + 0.5,
-						vertexColor.z,
-				1.0f);
+	
+	//// 作业 1 颜色交替 ---- 使颜色从 (1,0,0,1) => (1,1,0,1)
+	color = vec4(vertexColor.x, vertexColor.y + colorValue, vertexColor.z, 1.0f);
 
 }

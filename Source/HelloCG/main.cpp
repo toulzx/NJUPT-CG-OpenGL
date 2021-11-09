@@ -102,12 +102,11 @@ int main()
 
 		// 使用着色器绘制一个三角形
 		ourShader.Use();
-
-			// 作业 1 颜色交替
+		//// 作业 1 颜色交替 ---- BEG
 		float time = glfwGetTime();
 		float colorValue = (sin(time) / 2) + 0.5;
 		glUniform1f(glGetUniformLocation(ourShader.Program, "colorValue"), colorValue);
-
+		//// 作业 1 颜色交替 ---- END
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);

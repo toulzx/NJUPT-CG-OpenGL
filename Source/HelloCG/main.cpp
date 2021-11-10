@@ -54,21 +54,62 @@ int main()
 	}
 
 
+	// 开启深度测试
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
+	// 开启混合测试
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
 	Shader ourShader = Shader("res/shaders/core.vs", "res/shaders/core.fs");
 
 
-	// 顶点位置集 rectangle
+	// Week7-1 各面不同颜色的正方体
 	GLfloat vertices[] =
-	{	// position						// color
-		// first triangle
-		 0.5f,  0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f,  0.0f,			 1.0f,  0.0f,  0.0f,
+	{		// position						// color
+		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
 
-		// second triangle
-		 0.5f, -0.5f,  0.0f,			 0.0f,  1.0f,  0.0f,
-		-0.5f, -0.5f,  0.0f,			 0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f,  0.0f,			 0.0f,  1.0f,  0.0f
+		-0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
+
+		 0.5f,  0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
 	};
 
 
@@ -97,12 +138,25 @@ int main()
 		glViewport(0, 0, screenWidth, screenHeight);
 		glfwPollEvents();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		ourShader.Use();
 
+		//// Week 7-1 平移、旋转、缩放 --- BEG
+
+		glm::mat4 transform = glm::mat4(1.0f);
+
+		transform = glm::translate(transform, glm::vec3(0.0f, 0.4f, 0.0f));
+		transform = glm::rotate(transform, glm::radians(20.0f) * static_cast<GLfloat>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
+		transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
+
+		GLuint transLoc = glGetUniformLocation(ourShader.Program, "transform");
+		glUniformMatrix4fv(transLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+		//// Week 7-1 平移、旋转、缩放 --- END
+
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
 		
 		glfwSwapBuffers(window);

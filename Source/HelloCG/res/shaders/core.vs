@@ -8,6 +8,10 @@ layout(location = 2) in vec2 textCoord;
 
 out vec3 ourColor;
 out vec2 ourTextCoord;
+out float ourTranslateValue;
+
+
+uniform float translateValue;
 
 
 void main()
@@ -15,6 +19,7 @@ void main()
 
 	gl_Position = vec4(position, 1.0f);
 	ourColor = vertexColor;
-	ourTextCoord = vec2(textCoord.x, 1 - textCoord.y);
+	ourTextCoord = vec2(textCoord.x, 1 - textCoord.y - translateValue);
+	ourTranslateValue = translateValue;
 
 }

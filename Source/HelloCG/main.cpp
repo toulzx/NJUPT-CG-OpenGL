@@ -97,25 +97,41 @@ int main()
 
 
 	// 生成 2 维纹理，贴图
-	GLuint texture;
-	int imgWidth, imgHeight;
+	GLuint texture0, texture1;
+	int textureWidth0, textureHeight0, textureWidth1, textureHeight1;
 	
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	unsigned char* textureImage0 = SOIL_load_image("res/images/T_Reflection_Tiles_D.BMP", &textureWidth0, &textureHeight0, 0, SOIL_LOAD_RGBA);
+	unsigned char* textureImage1 = SOIL_load_image("res/images/T_TilingNoise03_M.BMP", &textureWidth1, &textureHeight1, 0, SOIL_LOAD_RGBA);
 
+	// 生成第 1 个纹理
+	// 生成、绑定纹理
+	glGenTextures(1, &texture0);
+	glBindTexture(GL_TEXTURE_2D, texture0);
 	// 纹理区域的设置
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-	unsigned char* image = SOIL_load_image("res/images/T_Reflection_Tiles_D.BMP", &imgWidth, &imgHeight, 0, SOIL_LOAD_RGBA);
-	
 	// 导入纹理缓冲池、生成
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgWidth, imgHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth0, textureHeight0, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage0);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	
+	// 解绑定
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//// 作业 2 纹理交替变换 ---- BEG
+	 
+	// 同理上一代码段，生成第 2 个纹理
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth1, textureHeight1, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage1);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	//// 作业 2 纹理交替变换 ---- END
 
 
 	// 逐帧画图
@@ -131,9 +147,22 @@ int main()
 		// 激活纹理
 		glActiveTexture(GL_TEXTURE0);
 		// 绑定纹理
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glBindTexture(GL_TEXTURE_2D, texture0);
 		// 通知着色器对应关系
 		glUniform1i(glGetUniformLocation(ourShader.Program, "texture0"), 0);
+
+		//// 作业 2 纹理交替变换 ---- BEG
+		
+		// 同理上一个代码段，通过 uniform 传递 texture
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glUniform1i(glGetUniformLocation(ourShader.Program, "texture1"), 1);
+		
+		// 通过 uniform 传送一个值，范围在 [0,1]
+		float time = glfwGetTime();
+		glUniform1f(glGetUniformLocation(ourShader.Program, "translateValue"), sin(time) / 2 + 0.5);
+
+		//// 作业 2 纹理交替变换 ---- END
 
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -153,7 +182,7 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
-	glDeleteTextures(1, &texture);
+	glDeleteTextures(1, &texture0);
 
 	return 0;
 

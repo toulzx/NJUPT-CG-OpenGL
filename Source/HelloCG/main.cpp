@@ -142,25 +142,35 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+
 		ourShader.Use();
 
-		// 激活纹理
-		glActiveTexture(GL_TEXTURE0);
-		// 绑定纹理
-		glBindTexture(GL_TEXTURE_2D, texture0);
-		// 通知着色器对应关系
-		glUniform1i(glGetUniformLocation(ourShader.Program, "texture0"), 0);
 
 		//// 作业 2 纹理交替变换 ---- BEG
-		
-		// 同理上一个代码段，通过 uniform 传递 texture
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture1);
-		glUniform1i(glGetUniformLocation(ourShader.Program, "texture1"), 1);
-		
-		// 通过 uniform 传送一个值，范围在 [0,1]
+
 		float time = glfwGetTime();
-		glUniform1f(glGetUniformLocation(ourShader.Program, "translateValue"), sin(time) / 2 + 0.5);
+		float translateValue = fmodf(time, 10.0f) / 10.0f;
+
+		if (((int)time / 10) % 2)
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture0);
+			glUniform1i(glGetUniformLocation(ourShader.Program, "texture0"), 0);
+
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, texture1);
+			glUniform1i(glGetUniformLocation(ourShader.Program, "texture1"), 1);
+		} else {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, texture0);
+			glUniform1i(glGetUniformLocation(ourShader.Program, "texture0"), 1);
+
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, texture1);
+			glUniform1i(glGetUniformLocation(ourShader.Program, "texture1"), 0);
+		}
+
+		glUniform1f(glGetUniformLocation(ourShader.Program, "translateValue"), translateValue);
 
 		//// 作业 2 纹理交替变换 ---- END
 

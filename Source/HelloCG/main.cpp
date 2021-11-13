@@ -22,11 +22,22 @@ bool keys[1024];
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 // 处理相机前后左右移动
 void DoMovement();
+// 实现滚轮触发操作
+void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+// 实现鼠标移动触发操作
+void MouseCallback(GLFWwindow* window, double xPos, double yPos);
 
 // 用摄像机坐标对相机视角的实例化
 Camera camera(glm::vec3(0.0f, 0.0f, 2.0f));
+
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+
+// 判断是否是第一次获取鼠标位置
+bool firstMouse = true;
+
+GLfloat lastX = WIDTH / 2.0f;
+GLfloat lastY = HEIGHT / 2.0f;
 
 
 int main()
@@ -56,8 +67,10 @@ int main()
 	// 设置焦点为当前窗口
 	glfwMakeContextCurrent(window);
 
-	// 在 GLFW 中注册键盘响应
+	// 在 GLFW 中注册响应
 	glfwSetKeyCallback(window, KeyCallback);
+	glfwSetCursorPosCallback(window, MouseCallback);
+	glfwSetScrollCallback(window, ScrollCallback);
 	
 
 	glewExperimental = GL_TRUE;
@@ -248,4 +261,26 @@ void DoMovement()
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 	}
 
+}
+
+void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	camera.ProcessScroll(xOffset, yOffset);
+}
+
+void MouseCallback(GLFWwindow* window, double xPos, double yPos)
+{
+	if (firstMouse)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouse = false;
+	}
+
+	GLfloat xOffset = xPos - lastX;
+	GLfloat yOffset = lastY - yPos;
+
+	lastX = xPos;
+	lastY = yPos;
+	camera.ProcessMouseMovement(xOffset, yOffset);
 }

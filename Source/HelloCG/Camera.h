@@ -16,7 +16,9 @@ const GLfloat DEFAULT_PITCH = 0.0f;
 // 视域（控制缩放）
 const GLfloat DEFAULT_ZOOM = 45.0f;
 // 相机移动速度
-const GLfloat DEFAULT_SPEED = 6.0f;		
+const GLfloat DEFAULT_SPEED = 6.0f;	
+// 鼠标灵敏程度
+const GLfloat DEFAULT_SENSITIVITY = 0.1f;
 
 const glm::vec3 DEFAULT_POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -48,7 +50,8 @@ public:
 		pitch(DEFAULT_PITCH),
 		movementSpeed(DEFAULT_SPEED),
 		cameraFront(DEFAULT_CAMERA_FRONT), 
-		zoom(DEFAULT_ZOOM)
+		zoom(DEFAULT_ZOOM), 
+		mouseSensitivity(DEFAULT_SENSITIVITY)
 	{
 		this->updateCameraVectors();
 	}
@@ -64,6 +67,7 @@ public:
 		this->movementSpeed = DEFAULT_SPEED;
 		this->cameraFront = DEFAULT_CAMERA_FRONT;
 		this->zoom = DEFAULT_ZOOM;
+		this->mouseSensitivity = DEFAULT_SENSITIVITY;
 		this->updateCameraVectors();
 	}
 	*/
@@ -73,7 +77,7 @@ public:
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
 		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
 		GLfloat yaw = DEFAULT_YAW,
-		GLfloat pitch = DEFAULT_PITCH) :cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)), zoom(DEFAULT_ZOOM), movementSpeed(DEFAULT_SPEED)
+		GLfloat pitch = DEFAULT_PITCH) :cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)), zoom(DEFAULT_ZOOM), movementSpeed(DEFAULT_SPEED), mouseSensitivity(DEFAULT_SENSITIVITY)
 	{
 		this->position = position;
 		this->worldUp = up;
@@ -116,13 +120,36 @@ public:
 		}
 	}
 
+	void ProcessMouseMovement(GLfloat xOffset, GLfloat yOffset)
+	{
+		xOffset *= this->mouseSensitivity;
+		yOffset *= this->mouseSensitivity;
+
+		this->yaw += xOffset;
+		this->pitch += yOffset;
+
+		this->updateCameraVectors();
+
+	}
+
+	void ProcessScroll(GLfloat xOffset, GLfloat yOffset)
+	{
+		if (this->zoom >= 1.0f && this->zoom <= 45.0f)
+			this->zoom -= yOffset;
+		if (this->zoom <= 1.0f)
+			this->zoom = 1.0f;
+		if (this->zoom >= DEFAULT_ZOOM)
+			this->zoom = 45.0f;
+	}
+
 
 private:
 	GLfloat yaw;
-	GLfloat pitch;
+	GLfloat pitch;	
 	GLfloat zoom;
 
 	GLfloat movementSpeed;
+	GLfloat mouseSensitivity;
 
 	glm::vec3 cameraPosition;
 

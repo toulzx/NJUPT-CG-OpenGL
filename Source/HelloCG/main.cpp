@@ -15,6 +15,12 @@
 // 窗口大小
 const GLint WIDTH = 800, HEIGHT = 600;
 
+// 存储键盘操作情况
+bool keys[1024];
+
+// 实现键盘操作
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
 
 int main()
 {
@@ -42,6 +48,9 @@ int main()
 
 	// 设置焦点为当前窗口
 	glfwMakeContextCurrent(window);
+
+	// 在 GLFW 中注册键盘响应
+	glfwSetKeyCallback(window, KeyCallback);
 	
 
 	glewExperimental = GL_TRUE;
@@ -69,6 +78,8 @@ int main()
 	// Week7-1 各面不同颜色的正方体
 	GLfloat vertices[] =
 	{		// position						// color
+
+		// z = -0.5 的矩形面				// 红色 (1, 0, 0)
 		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
@@ -76,6 +87,7 @@ int main()
 		-0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
 		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
 
+		// z =  0.5 的矩形面				// 绿色 (0, 1, 0)
 		-0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
 		 0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
 		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
@@ -83,6 +95,7 @@ int main()
 		-0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
 		-0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
 
+		// x = -0.5 的矩形面				// 蓝色 (0, 0, 1)
 		-0.5f,  0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
 		-0.5f,  0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
 		-0.5f, -0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
@@ -90,6 +103,7 @@ int main()
 		-0.5f, -0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
 		-0.5f,  0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
 
+		// x =  0.5 的矩形面				// 黄色 (1, 1, 0)
 		 0.5f,  0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
 		 0.5f,  0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
 		 0.5f, -0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
@@ -97,6 +111,7 @@ int main()
 		 0.5f, -0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
 		 0.5f,  0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
 
+		 // y = -0.5 的矩形面			// 紫色 (1, 0, 1)
 		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
 		 0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
@@ -104,6 +119,7 @@ int main()
 		-0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
 		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
 
+		// y =  0.5 的矩形面				// 青色 (0, 1, 1)
 		-0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
 		 0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
 		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
@@ -136,24 +152,26 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		glViewport(0, 0, screenWidth, screenHeight);
+
+		// 响应 keyCallback 操作
 		glfwPollEvents();
+		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		
 		ourShader.Use();
 
-		//// Week 7-1 平移、旋转、缩放 --- BEG
-
+		
 		glm::mat4 transform = glm::mat4(1.0f);
-
-		transform = glm::translate(transform, glm::vec3(0.0f, 0.4f, 0.0f));
+		transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -2.0f));
 		transform = glm::rotate(transform, glm::radians(20.0f) * static_cast<GLfloat>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
 		transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 
-		GLuint transLoc = glGetUniformLocation(ourShader.Program, "transform");
-		glUniformMatrix4fv(transLoc, 1, GL_FALSE, glm::value_ptr(transform));
+		glm::mat4 projection = glm::perspective(glm::radians(90.0f), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-		//// Week 7-1 平移、旋转、缩放 --- END
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -172,4 +190,24 @@ int main()
 
 	return 0;
 
+}
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+	// esc 退出
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+	// 其它按键若按下则被记录
+	if (key >= 0 && key < 1024) {
+		if (action == GLFW_PRESS)
+		{
+			keys[key] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			keys[key] = false;
+		}
+	}
 }

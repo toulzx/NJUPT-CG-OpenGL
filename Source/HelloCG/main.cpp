@@ -10,6 +10,7 @@
 #include <GLM/gtc/type_ptr.hpp>
 
 #include "Shader.h"
+#include "Camera.h"
 
 
 // 窗口大小
@@ -17,9 +18,15 @@ const GLint WIDTH = 800, HEIGHT = 600;
 
 // 存储键盘操作情况
 bool keys[1024];
-
 // 实现键盘操作
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+// 处理相机前后左右移动
+void DoMovement();
+
+// 用摄像机坐标对相机视角的实例化
+Camera camera(glm::vec3(0.0f, 0.0f, 2.0f));
+GLfloat deltaTime = 0.0f;
+GLfloat lastTime = 0.0f;
 
 
 int main()
@@ -155,7 +162,9 @@ int main()
 
 		// 响应 keyCallback 操作
 		glfwPollEvents();
-		
+
+		DoMovement();
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -169,8 +178,11 @@ int main()
 		transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 
-		glm::mat4 projection = glm::perspective(glm::radians(90.0f), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+		glm::mat4 view = camera.GetViewMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 
 
 		glBindVertexArray(VAO);
@@ -210,4 +222,30 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 			keys[key] = false;
 		}
 	}
+}
+
+void DoMovement()
+{
+
+	GLfloat currentTime = glfwGetTime();
+	deltaTime = currentTime - lastTime;
+	lastTime = currentTime;
+
+	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
+	{
+		camera.ProcessKeyboard(FORWARD, deltaTime);
+	}
+	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
+	{
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
+	}
+	if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
+	{
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	}
+	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
+	{
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	}
+
 }

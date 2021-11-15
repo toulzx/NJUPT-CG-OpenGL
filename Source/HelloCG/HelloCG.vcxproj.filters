@@ -35,12 +35,21 @@
     <None Include="res\shaders\core.vs">
       <Filter>资源文件\res\shaders</Filter>
     </None>
+    <None Include="res\shaders\light.fs">
+      <Filter>资源文件\res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\light.vs">
+      <Filter>资源文件\res\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

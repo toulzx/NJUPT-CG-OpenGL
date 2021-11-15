@@ -148,9 +148,12 @@
     <None Include="glew32.dll" />
     <None Include="res\shaders\core.fs" />
     <None Include="res\shaders\core.vs" />
+    <None Include="res\shaders\light.fs" />
+    <None Include="res\shaders\light.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

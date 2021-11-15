@@ -148,6 +148,8 @@
     <None Include="glew32.dll" />
     <None Include="res\shaders\core.fs" />
     <None Include="res\shaders\core.vs" />
+    <None Include="res\shaders\core_new.fs" />
+    <None Include="res\shaders\core_new.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h" />

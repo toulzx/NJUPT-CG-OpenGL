@@ -8,8 +8,12 @@
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "Shader.h"
+
+
+#define PI 3.1415926
 
 
 // 窗口大小
@@ -72,60 +76,61 @@ int main()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-	Shader ourShader = Shader("res/shaders/core.vs", "res/shaders/core.fs");
+	Shader ourShader = Shader("res/shaders/core.vs", "res/shaders/core.fs");				// 地球
+	Shader ourNewShader = Shader("res/shaders/core_new.vs", "res/shaders/core_new.fs");		// 月球
 
 
-	// Week7-1 各面不同颜色的正方体
+	// 各面不同颜色的正方体(两个一样的正方体)
 	GLfloat vertices[] =
-	{		// position						// color
-
-		// z = -0.5 的矩形面				// 红色 (1, 0, 0)
-		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 0.0f,
-
-		// z =  0.5 的矩形面				// 绿色 (0, 1, 0)
-		-0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,			0.0f, 1.0f, 0.0f,
-
-		// x = -0.5 的矩形面				// 蓝色 (0, 0, 1)
-		-0.5f,  0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,			0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,			0.0f, 0.0f, 1.0f,
-
-		// x =  0.5 的矩形面				// 黄色 (1, 1, 0)
-		 0.5f,  0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,			1.0f, 1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,			1.0f, 1.0f, 0.0f,
-
-		 // y = -0.5 的矩形面			// 紫色 (1, 0, 1)
-		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,			1.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,			1.0f, 0.0f, 1.0f,
-
-		// y =  0.5 的矩形面				// 青色 (0, 1, 1)
-		-0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,			0.0f, 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,			0.0f, 1.0f, 1.0f,
+	{		// position1			// color1			// position2		 // color2
+																			 
+		// z = -0.5 的矩形面		// 红色 (1, 0, 0)	 // z = -0.5 的矩形面	 // 红色 (1, 0, 0)
+		-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,	-0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,	 0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 0.0f, 0.0f,	 0.5f,  0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 0.0f, 0.0f,	 0.5f,  0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,	1.0f, 0.0f, 0.0f,	-0.5f,  0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 0.0f,	-0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 0.0f,
+																			 
+		// z =  0.5 的矩形面		// 绿色 (0, 1, 0)	 // z =  0.5 的矩形面	 // 绿色 (0, 1, 0)
+		-0.5f, -0.5f,  0.5f,	0.0f, 1.0f, 0.0f,	-0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,	0.0f, 1.0f, 0.0f,	 0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,	0.0f, 1.0f, 0.0f,	 0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,	0.0f, 1.0f, 0.0f,	 0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f, 1.0f, 0.0f,	-0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f, 1.0f, 0.0f,	-0.5f, -0.5f,  0.5f,	 0.0f, 1.0f, 0.0f,
+																			 
+		// x = -0.5 的矩形面		// 蓝色 (0, 0, 1)	 // x = -0.5 的矩形面	 // 蓝色 (0, 0, 1)
+		-0.5f,  0.5f,  0.5f,	0.0f, 0.0f, 1.0f,	-0.5f,  0.5f,  0.5f,	 0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f, 0.0f, 1.0f,	-0.5f,  0.5f, -0.5f,	 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f, 0.0f, 1.0f,	-0.5f, -0.5f, -0.5f,	 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f, 0.0f, 1.0f,	-0.5f, -0.5f, -0.5f,	 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f, 0.0f, 1.0f,	-0.5f, -0.5f,  0.5f,	 0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f, 0.0f, 1.0f,	-0.5f,  0.5f,  0.5f,	 0.0f, 0.0f, 1.0f,
+																			 
+		// x =  0.5 的矩形面		// 黄色 (1, 1, 0)	 // x =  0.5 的矩形面	 // 黄色 (1, 1, 0)
+		 0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 0.0f,	 0.5f,  0.5f,  0.5f,	 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f, 0.0f,	 0.5f,  0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 0.0f,	 0.5f, -0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 1.0f, 0.0f,	 0.5f, -0.5f, -0.5f,	 1.0f, 1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f, 1.0f, 0.0f,	 0.5f, -0.5f,  0.5f,	 1.0f, 1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 1.0f, 0.0f,	 0.5f,  0.5f,  0.5f,	 1.0f, 1.0f, 0.0f,
+																			 
+		 // y = -0.5 的矩形面	// 紫色 (1, 0, 1)	 // y = -0.5 的矩形面	 // 紫色 (1, 0, 1)
+		-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 1.0f,	-0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 1.0f,	 0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f, 0.0f, 1.0f,	 0.5f, -0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f, 0.0f, 1.0f,	 0.5f, -0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,	1.0f, 0.0f, 1.0f,	-0.5f, -0.5f,  0.5f,	 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,	1.0f, 0.0f, 1.0f,	-0.5f, -0.5f, -0.5f,	 1.0f, 0.0f, 1.0f,
+																			 
+		// y =  0.5 的矩形面		// 青色 (0, 1, 1)	 // y =  0.5 的矩形面	 // 青色 (0, 1, 1)
+		-0.5f,  0.5f, -0.5f,	0.0f, 1.0f, 1.0f,	-0.5f,  0.5f, -0.5f,	 0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,	0.0f, 1.0f, 1.0f,	 0.5f,  0.5f, -0.5f,	 0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,	0.0f, 1.0f, 1.0f,	 0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,	0.0f, 1.0f, 1.0f,	 0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f, 1.0f, 1.0f,	-0.5f,  0.5f,  0.5f,	 0.0f, 1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f, 1.0f, 1.0f,	-0.5f,  0.5f, -0.5f,	 0.0f, 1.0f, 1.0f
 	};
 
 
@@ -139,13 +144,21 @@ int main()
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 12 * sizeof(GLfloat), (GLvoid*)(9 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(3);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+
+	//设置环绕物的起始坐标
+	glm::vec3 newPos = glm::vec3(0.0f, 0.0f, -1.0f);
 
 
 	// 逐帧画图
@@ -159,19 +172,38 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+		/* 中心正方体（地球） */
 		
 		ourShader.Use();
 
-		
 		glm::mat4 transform = glm::mat4(1.0f);
 		transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, -2.0f));
-		transform = glm::rotate(transform, glm::radians(20.0f) * static_cast<GLfloat>(glfwGetTime()), glm::vec3(1.0f, 1.0f, 1.0f));
+		transform = glm::rotate(transform, glm::radians(20.0f) * static_cast<GLfloat>(glfwGetTime()), glm::vec3(sin(23.5 * PI / 180), cos(23.5 * PI / 180), 0));
 		transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 
 		glm::mat4 projection = glm::perspective(glm::radians(90.0f), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
 		glUniformMatrix4fv(glGetUniformLocation(ourShader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
+
+		/* 旋转正方体（月球） */
+
+		ourNewShader.Use();
+
+		glm::mat4 newTransform = glm::mat4(1.0f);
+		newPos = glm::rotate(newPos, glm::radians(0.05f), glm::vec3(sin(23.5 * PI / 180), cos(23.5 * PI / 180) , 0));
+		newTransform = glm::translate(newTransform, glm::vec3(newPos.x, newPos.y, newPos.z - 2));
+		newTransform = glm::rotate(newTransform, glm::radians(20.0f) * static_cast<GLfloat>(glfwGetTime()), glm::vec3(sin(23.5 * PI / 180), cos(23.5 * PI / 180), 0));
+		newTransform = glm::scale(newTransform, glm::vec3(0.1f, 0.1f, 0.1f));
+		glUniformMatrix4fv(glGetUniformLocation(ourNewShader.Program, "newTransform"), 1, GL_FALSE, glm::value_ptr(newTransform));
+
+		glm::mat4 newProjection = glm::perspective(glm::radians(90.0f), float(screenWidth) / float(screenHeight), 0.1f, 100.0f);
+		glUniformMatrix4fv(glGetUniformLocation(ourNewShader.Program, "newProjection"), 1, GL_FALSE, glm::value_ptr(newProjection));
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);

@@ -35,6 +35,12 @@
     <None Include="res\shaders\core.vs">
       <Filter>资源文件\res\shaders</Filter>
     </None>
+    <None Include="res\shaders\core_new.fs">
+      <Filter>资源文件\res\shaders</Filter>
+    </None>
+    <None Include="res\shaders\core_new.vs">
+      <Filter>资源文件\res\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">

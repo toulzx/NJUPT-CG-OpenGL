@@ -4,35 +4,30 @@
 
 由于疫情，[2021-2022-1] 的**计算机图形学**课程（课程代号：*B0301312C* ）采取了线上教学模式。
 
-鉴于这门课程的内容有一定难度，我已将课程回放保存并上传 **b 站**（[BV1ib4y1Y74J](https://b23.tv/sBmpt8E)）。此外，根据上课内容，我上传了课程的代码内容（[toulzx/NJUPT-CG-OpenGL](https://github.com/toulzx/NJUPT-CG-OpenGL)）供大家参考。
+鉴于这门课程的内容有一定难度，我已将课程回放保存并上传 **bilibili 弹幕网**（[BV1ib4y1Y74J](https://b23.tv/sBmpt8E)）。此外，根据上课内容，我上传了课程的代码内容（[toulzx/NJUPT-CG-OpenGL](https://github.com/toulzx/NJUPT-CG-OpenGL)）供大家参考。
 
 
 ## 如何食用
 
-### 教程
-
-我推荐你学习这篇教程：[LearnOpenGL](https://learnopengl-cn.github.io)，你会发现老师的课程（特指 2021-2022 学年课程）参考了这份教程。
- 
-
 ### 项目结构
 
-- `Source`
-  - `HelloCG`: 此项目文件夹  
-  - some `PDFs`: 相关配置教程
-- some `.ZIPs`: 配置文件
+- 文件夹 `Source`
+  - 文件夹 `HelloCG`: 此项目文件夹  
+  - 一些文件 `.PDFs`: 功能库配置教程
+- 一些文件 `.ZIPs`: 功能库
 
  
 ### 查阅历次代码及差异
 
 我按照课程教学顺序，将历次课程代码提交到此仓库下。
 
-`test_4` 分支的[最新一次 commit 内容](https://github.com/toulzx/NJUPT-CG-OpenGL/commit/65f6459491966bc9d3d7b68b8fe9ffbe4d46ba11)是本课程的最后一次作业（第 4 次作业），它是基于课程的代码内容，因此我将此分支设置为默认分支。
+`test_4` 分支的[最新一次 commit 内容](https://github.com/toulzx/NJUPT-CG-OpenGL/commit/65f6459491966bc9d3d7b68b8fe9ffbe4d46ba11)是本课程的最后一次作业（第 4 次作业），它是基于课程的代码内容，由于此分支包含了所有课程的代码内容的 commits，因此我将此分支设置为默认分支。
 
 此外，此前另外 3 次作业的代码不在课程教学内容中，因此我创建了 `test_3` 、`test_2` 、`test_1` 分支，他们是从默认分支的某次课程内容延伸出去的。
 
-你可以点击仓库主页的 [`commits`](https://github.com/toulzx/NJUPT-CG-OpenGL/commits/test_4)，这可以阅览历次 commit 的信息， 当你点击 [某次 commit 的标题](https://github.com/toulzx/NJUPT-CG-OpenGL/commit/ebd13441c8ac2de793d20d961ef16babb355a12a)时，你可查看和上一次commit 内容的差异，我认为这可能会方便大家查看历次课程代码差异。
+你可以点击仓库主页的 [`commits`](https://github.com/toulzx/NJUPT-CG-OpenGL/commits/test_4)，这可以阅览历次 commit 的信息， 当你点击 [某次 commit 的标题](https://github.com/toulzx/NJUPT-CG-OpenGL/commit/ebd13441c8ac2de793d20d961ef16babb355a12a) 时，你可查看和上一次commit 内容的差异，我认为这可能会方便大家查看历次课程代码的差异。
 
-这样的做法是我的首次尝试，有些 commit 由于失误导致`commit 差异比较页面`的展示有误，我会在出现这种情况的代码差异页面提供批注。当然，你也可以不参考 commit 差异，你仍然可以下载运行可使用的的历次课程代码（见下）。
+⚠注意：这样的做法是我的首次尝试，有些 commits 的差异由于失误并不能正确预览，我会在出现这种情况的 `commit 差异` 页面提供批注。当然，你完全可以不参考 commit 差异，你仍然可以下载运行可使用的的历次课程代码（见下）。
 
 
 
@@ -79,16 +74,34 @@
 - [**Week8-3** **Exercise4** & **fix** 实现控制物体的（↑/↓/←/→）移动 && 修复 x 轴光照位置的错误](https://github.com/toulzx/NJUPT-CG-OpenGL/tree/65f6459491966bc9d3d7b68b8fe9ffbe4d46ba11)
 
 
+### 下载
+
+你可以通过 `Git` 直接将项目 clone 到本地，然后借助编辑器内置的 Git 管理工具即可轻松切换历次版本。
+
+如果你看不懂上面这一行我在说什么，你可以拷贝链接到 [DownGit](https://minhaskamal.github.io/DownGit/#/home) 下载。
+
 ## 友情链接
 
-这是 2019 级同学上传的一些笔记：
+### 关于教程
 
-- [CSDN：OpenGL初学者入门——学习指南【共 9 篇文章】](https://blog.csdn.net/Wang_Dou_Dou_/article/details/121240714)
-- [CSDN：南邮计算机图形学实验报告](https://blog.csdn.net/qq_45668594/category_11435461.html)
+我推荐你学习这篇教程：[**LearnOpenGL**](https://learnopengl-cn.github.io)，你会发现此课程（特指 2021-2022 学年第 1 学期的线上课程）的授课思路参考了这份教程。
+
+
+### 课程笔记 & 代码
+
+- [【CSDN】OpenGL初学者入门——学习指南](https://blog.csdn.net/Wang_Dou_Dou_/article/details/121240714)
+- [【CSDN】南邮计算机图形学实验报告](https://blog.csdn.net/qq_45668594/category_11435461.html)
+- [【GitHub】 GodWuzZ/Graphics](https://github.com/GodWuzZ/Graphics)
+- [【yuque】tou/NJUPT-CG-OpenGL](https://www.yuque.com/toulzx/website-sync/njupt-cg-opengl#bt58x)
 
 
 ## 一点建议
 
 **不要未经思考直接 copy 代码。**
 
-首先，这对你学习这门课程没有好处；其次，老师检查作业的时候，会查看你的代码并询问细节（真的有人翻车了orz）。
+首先，这对你学习这门课程没有好处；其次，老师检查作业的时候，会查看你的代码并询问细节。
+
+
+## 更多
+
+我已经将本课程的个人笔记上传到了语雀和个人博客，你可以在[**这里**](https://toulzx.github.io/)找到最新的文档。
